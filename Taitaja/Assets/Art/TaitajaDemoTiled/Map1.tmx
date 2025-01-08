@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="2">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="28">
  <tileset firstgid="1" source="PixelAdventureTerrain.tsx"/>
- <layer id="1" name="Ground" width="25" height="20">
+ <layer id="1" name="Ground" width="25" height="20" locked="1">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -25,9 +25,77 @@
 52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52
 </data>
  </layer>
- <objectgroup id="2" name="Colliders">
-  <object id="1" x="0" y="32">
-   <polygon points="0,0 16,0 16,48 32,48 32,96 48,96 48,192 80,192 80,240 208,240 208,224 224,224 224,208 256,208 256,224 272,224 272,240 336,240 336,192 352,192 352,176 368,176 368,160 400,160 400,288 0,288"/>
+ <objectgroup id="2" name="GroundColliders" locked="1">
+  <object id="3" x="80" y="272">
+   <polygon points="0,0 128,0 128,4 0,4"/>
+  </object>
+  <object id="4" x="209" y="256">
+   <polygon points="0,0 15,0 15,2 0,2"/>
+  </object>
+  <object id="5" x="225" y="240">
+   <polygon points="0,0 30,0 30,2 0,2"/>
+  </object>
+  <object id="6" x="256" y="256">
+   <polygon points="0,0 15,0 15,2 0,2"/>
+  </object>
+  <object id="7" x="272" y="272">
+   <polygon points="0,0 64,0 64,2 0,2"/>
+  </object>
+  <object id="8" x="79" y="224">
+   <polygon points="0,0 0,2 -31,2 -31,0"/>
+  </object>
+  <object id="9" x="47" y="130">
+   <polygon points="0,0 -15,0 -15,-2 0,-2"/>
+  </object>
+  <object id="10" x="31" y="82">
+   <polygon points="0,0 0,-2 -15,-2 -15,0"/>
+  </object>
+  <object id="11" x="15" y="34">
+   <polygon points="0,0 0,-2 -15,-2 -15,0"/>
+  </object>
+  <object id="12" x="352" y="224">
+   <polygon points="0,0 -15,0 -15,2 0,2"/>
+  </object>
+  <object id="13" x="353" y="208">
+   <polygon points="0,0 0,2 15,2 15,0"/>
+  </object>
+  <object id="14" x="369" y="192">
+   <polygon points="0,0 31,0 31,2 0,2"/>
+  </object>
+ </objectgroup>
+ <objectgroup id="3" name="WallColliders" locked="1">
+  <object id="16" x="80" y="225">
+   <polygon points="0,0 -2,0 -2,47 0,47"/>
+  </object>
+  <object id="17" x="48" y="224">
+   <polygon points="0,0 0,-95 -2,-95 -2,0"/>
+  </object>
+  <object id="18" x="32" y="128">
+   <polygon points="0,0 0,-47 -2,-47 -2,0"/>
+  </object>
+  <object id="19" x="16" y="80">
+   <polygon points="0,0 0,-47 -2,-47 -2,0"/>
+  </object>
+  <object id="20" x="208" y="272">
+   <polygon points="0,0 0,-15 2,-15 2,0"/>
+  </object>
+  <object id="21" x="224" y="256">
+   <polygon points="0,0 0,-15 2,-15 2,0"/>
+  </object>
+  <object id="22" x="254" y="241">
+   <polygon points="0,0 2,0 2,15 0,15"/>
+  </object>
+  <object id="24" x="270" y="257">
+   <polygon points="0,0 2,0 2,15 0,15"/>
+  </object>
+  <object id="25" x="336" y="272">
+   <polygon points="0,0 0,-47 2,-47 2,0"/>
+  </object>
+  <object id="26" x="352" y="224">
+   <polygon points="0,0 0,-15 2,-15 2,0"/>
+  </object>
+  <object id="27" x="368" y="208">
+   <polygon points="0,0 0,-15 2,-15 2,0"/>
   </object>
  </objectgroup>
 </map>
