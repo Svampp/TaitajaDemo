@@ -1,54 +1,63 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Player movement script
+/// Handles player movement, including jumping, running, and collision with enemies.
 /// </summary>
 public class PlayerMove : MonoBehaviour
 {
+    // Speed and movement parameters
     public float moveSpeed = 5f;          // Speed of movement
     public float jumpForce = 7f;         // Jump power
-    public LayerMask groundLayer;        // Layer of ground for checking
-    public Transform groundCheck;        // Ground touch test point
-    public float groundCheckRadius = 0.2f; // Ground touch check radius
 
+    // Ground detection settings
+    public LayerMask groundLayer;        // Layer to check for ground collisions
+    public Transform groundCheck;        // Position used to check if the player is grounded
+    public float groundCheckRadius = 0.2f; // Radius of the ground check
+
+    // Cached references to components
     Rigidbody2D rb;
     Animator animator;
-    bool isControllable = true;  // Flag to check if the player can be controlled
+    PlayerHealth playerHealth;
+
+    // Control flag
+    bool isControllable = true;  // Determines if the player can move or perform actions
 
     void Start()
     {
-        // Cache references to Rigidbody2D and Animator components
+        // Cache references to components
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        playerHealth = GetComponent<PlayerHealth>();
     }
 
     void Update()
     {
-        if (!isControllable) return; // Stop if player controls are disabled
+        // Stop all actions if the player is not controllable
+        if (!isControllable) return;
 
-        // Check if the player is grounded
+        // Check if the player is on the ground
         bool isGrounded = IsGrounded();
 
-        // Get horizontal input and update velocity
+        // Get horizontal input and update the player's velocity
         float moveInput = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(moveInput * moveSpeed, rb.velocity.y);
 
-        // Flip the player sprite based on movement direction
+        // Flip the player's sprite based on movement direction
         if (moveInput != 0)
             transform.localScale = new Vector3(Mathf.Sign(moveInput), 1, 1);
 
-        // Jump if the spacebar is pressed and the player is grounded
+        // Jump if spacebar is pressed and the player is grounded
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
 
-        // Update animator parameters
+        // Update animator parameters for grounded status and movement
         animator.SetBool("isGrounded", isGrounded);
         animator.SetFloat("velocityX", Mathf.Abs(rb.velocity.x));
         animator.SetFloat("velocityY", rb.velocity.y);
     }
 
     /// <summary>
-    /// Draw the ground check radius in the editor
+    /// Draws a visual representation of the ground check radius in the editor.
     /// </summary>
     void OnDrawGizmosSelected()
     {
@@ -60,28 +69,31 @@ public class PlayerMove : MonoBehaviour
     }
 
     /// <summary>
-    /// Check if the player collides with an object tagged as "Enemy" and player die
+    /// Handles collisions with enemies. If the player collides with an enemy, they die.
     /// </summary>
+    /// <param name="collision">The collision data.</param>
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider.CompareTag("Enemy"))
         {
             isControllable = false; // Disable player controls
-            rb.velocity = Vector2.zero; // Stop all movement
-            animator.SetTrigger("Death"); // Trigger death animation
-            Invoke(nameof(DisablePlayer), 1f); // Disable player after 1 second
+            playerHealth.Die();     // Trigger the death process
         }
     }
 
     /// <summary>
-    /// Check if the player is touching the ground
+    /// Checks if the player is currently on the ground.
     /// </summary>
-    /// <returns>True if grounded, false otherwise</returns>
+    /// <returns>True if the player is grounded, otherwise false.</returns>
     bool IsGrounded() =>
         Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
 
     /// <summary>
-    /// Disable the player object
+    /// Resets control of the player, allowing them to move again.
+    /// Typically called after a respawn.
     /// </summary>
-    void DisablePlayer() => gameObject.SetActive(false);
+    public void ResetControl()
+    {
+        isControllable = true; // Re-enable player controls
+    }
 }

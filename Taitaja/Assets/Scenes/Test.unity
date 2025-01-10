@@ -711,24 +711,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3940798025985779034, guid: a213948aa4ae6834d88cbb7edefc50b1, type: 3}
-      propertyPath: jumpForce
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 3940798025985779034, guid: a213948aa4ae6834d88cbb7edefc50b1, type: 3}
-      propertyPath: jumpController
-      value: 
-      objectReference: {fileID: 9100000, guid: 85bd361a0bf30544b850a9e0d2fd57f5, type: 2}
     - target: {fileID: 4734714550133354364, guid: a213948aa4ae6834d88cbb7edefc50b1, type: 3}
       propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 4734714550133354364, guid: a213948aa4ae6834d88cbb7edefc50b1, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4734714550133354364, guid: a213948aa4ae6834d88cbb7edefc50b1, type: 3}
-      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
