@@ -20,4 +20,13 @@ public class StingerBullet : MonoBehaviour
         yield return new WaitForSeconds(detonaitonTime);
         Destroy(gameObject);
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // If bullet hits ground or player it destroys itself
+        if (collision.gameObject.layer == 6 || collision.gameObject.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
+    }
 }
