@@ -29,7 +29,7 @@ public class EnemyBee : MonoBehaviour
     }
 
     /// <summary>
-    /// Instantiates a bee stinger bullet
+    /// Instantiates a bee stinger bulletPrefab
     /// </summary>
     public void Shoot()
     {
