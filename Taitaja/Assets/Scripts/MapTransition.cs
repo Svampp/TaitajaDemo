@@ -1,54 +1,42 @@
 ﻿using UnityEngine;
-
 /// <summary>
 /// Handles transitions between maps, updating respawn points and extending camera boundaries.
 /// </summary>
 public class MapTransition : MonoBehaviour
 {
-    // The new map to transition to
+    // The new map to activate when transitioning
     public GameObject newMap;
 
-    // The current map being left
-    public GameObject currentMap;
-
-    // The current respawn point for the playerTransform
-    public Transform currentRespawnPoint;
-
-    // The new respawn point for the playerTransform after transitioning
+    // The new respawn point for the player after transitioning
     public Transform newRespawnPoint;
 
     /// <summary>
-    /// Triggered when a collider enters the transition zone.
-    /// Checks if the playerTransform is transitioning to a new map and updates the state accordingly.
+    /// Checks if the player is transitioning to a new map and updates the state accordingly.
     /// </summary>
-    /// <param name="collision">The collider entering the trigger zone.</param>
     void OnTriggerEnter2D(Collider2D collision)
     {
-        // Check if the playerTransform is the one entering the transition zone
-        if (collision.CompareTag("Player"))
+        // Ensure the collision is with the player
+        if (!collision.CompareTag("Player")) return;
+
+        // Access the main camera component
+        MainCamera mainCamera = Camera.main.GetComponent<MainCamera>();
+
+        // Check if the main camera and the new map are valid
+        if (mainCamera != null && newMap != null)
         {
-            // Extend the camera's boundaries to include the new map
-            var mainCamera = Camera.main.GetComponent<MainCamera>();
-            mainCamera.ExtendBound(currentMap, newMap);
-
-            // Update the respawn point to the new respawn point for this map
-            RespawnManager.Instance.SetRespawnPoint(newRespawnPoint);
-
-            // Activate the new map if it is not already active
-            if (!newMap.activeSelf)
+            // Retrieve the map configuration for the new map
+            var newMapConfig = newMap.GetComponent<SuperTiled2Unity.SuperMap>();
+            if (newMapConfig != null)
             {
-                newMap.SetActive(true);
+                // Extend camera boundaries to include the new map
+                mainCamera.ExtendBound(GameObject.Find("Map1"), newMap);
             }
         }
-    }
 
-    /// <summary>
-    /// Updates the current respawn point to a new one.
-    /// This method can be used externally to manually set the respawn point.
-    /// </summary>
-    /// <param name="newRespawnPoint">The new respawn point for the playerTransform.</param>
-    public void SetRespawnPoint(Transform newRespawnPoint)
-    {
-        currentRespawnPoint = newRespawnPoint;
+        // Update the respawn point to the new one
+        RespawnManager.Instance.SetRespawnPoint(newRespawnPoint);
+
+        // Activate the new map if it is not already active
+        if (!newMap.activeSelf) newMap.SetActive(true);
     }
 }

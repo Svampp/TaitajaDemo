@@ -2,153 +2,56 @@
 using UnityEngine;
 
 /// <summary>
-/// Handles playerTransform health, including death, animations, and respawn logic.
+/// Handles player health, including death, animations, and respawn logic.
 /// </summary>
 public class PlayerHealth : MonoBehaviour
 {
-    // References to components
-    Animator animator;
-    Rigidbody2D rb;
-
-    // Respawn point and delay before respawning
-    public Transform respawnPoint;
-    public float respawnDelay = 1f;
-
-    // Reference to the playerTransform movement script
-    PlayerMove playerMove;
-
-    // Flag to prevent multiple respawn triggers
-    bool isRespawning;
+    // Cached references to components
+    Animator animator; // Animator component for handling animations
+    Rigidbody2D rb; // Rigidbody2D component for controlling physics
+    PlayerMove playerMove; // Reference to the PlayerMove script
 
     void Start()
     {
-        // Initialize references
-        animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
-        playerMove = GetComponent<PlayerMove>();
+        animator = GetComponent<Animator>(); // Cache Animator component
+        rb = GetComponent<Rigidbody2D>(); // Cache Rigidbody2D component
+        playerMove = GetComponent<PlayerMove>(); // Cache PlayerMove component
     }
 
     /// <summary>
-    /// Handles the playerTransform's death logic, including stopping movement,
-    /// playing the death animation, and initiating the respawn process.
+    /// Handles the player's death logic, including stopping movement and playing the death animation.
     /// </summary>
     public void Die()
     {
-        // Stop playerTransform movement
-        rb.velocity = Vector2.zero;
+        rb.velocity = Vector2.zero; // Stop the player's movement
+        animator.SetTrigger("Death"); // Trigger the death animation
+        playerMove.enabled = false; // Disable player movement
 
-        // Trigger death animation
-        animator.SetTrigger("Death");
-
-        // Disable playerTransform movement
-        if (playerMove != null)
-        {
-            playerMove.enabled = false;
-        }
-
-        // Start the death animation coroutine
-        StartCoroutine(HandleDeathAnimation());
+        StartCoroutine(HandleDeathAnimation()); // Start coroutine for handling post-death logic
     }
 
     /// <summary>
-    /// Coroutine to handle death animation and respawn logic.
+    /// Coroutine to handle the death animation and respawn logic.
     /// </summary>
     IEnumerator HandleDeathAnimation()
     {
-        // Set death state in the animator
-        animator.SetBool("isDead", true);
-        animator.SetTrigger("Death");
+        animator.SetBool("isDead", true); // Set the isDead parameter for the animator
 
-        // Wait for the death animation to start
-        yield return WaitForAnimationToPlay("Death");
+        // Wait for the current animation to finish
+        yield return new WaitForSeconds(animator.GetCurrentAnimatorStateInfo(0).length);
 
-        // Wait for the death animation to finish
-        float deathAnimationDuration = animator.GetCurrentAnimatorStateInfo(0).length;
-        yield return new WaitForSeconds(deathAnimationDuration);
-
-        // Deactivate the playerTransform
-        gameObject.SetActive(false);
-
-        // Trigger respawn through the GameManager
-        GameManager.Instance.RespawnPlayer(this.gameObject, respawnDelay);
+        gameObject.SetActive(false); // Deactivate the player GameObject
+        GameManager.Instance.RespawnPlayer(gameObject, 1f); // Trigger respawn through GameManager
     }
 
     /// <summary>
-    /// Respawns the playerTransform at the current respawn point and resets their state.
-    /// </summary>
-    public void Respawn()
-    {
-        // Get the current respawn point from the RespawnManager
-        Transform respawnPoint = RespawnManager.Instance.GetCurrentRespawnPoint();
-
-        if (respawnPoint != null)
-        {
-            // Move the playerTransform to the respawn point
-            transform.position = respawnPoint.position;
-
-            // Reset the playerTransform's velocity
-            if (rb != null)
-            {
-                rb.velocity = Vector2.zero;
-                rb.angularVelocity = 0f;
-            }
-        }
-        else
-        {
-            // Exit if no respawn point is available
-            return;
-        }
-
-        // Reset animator states
-        animator.SetBool("isDead", false);
-        animator.ResetTrigger("Death");
-        animator.SetBool("isGrounded", true);
-        animator.SetFloat("velocityX", 0);
-        animator.SetFloat("velocityY", 0);
-
-        // Reactivate the playerTransform GameObject
-        gameObject.SetActive(true);
-
-        // Re-enable playerTransform movement
-        if (playerMove != null)
-        {
-            playerMove.enabled = true;
-        }
-
-        // Mark respawn process as complete
-        isRespawning = false;
-    }
-
-    /// <summary>
-    /// Waits until a specified animation starts playing.
-    /// </summary>
-    /// <param name="animationName">The name of the animation to wait for.</param>
-    /// <returns>An IEnumerator for coroutine handling.</returns>
-    IEnumerator WaitForAnimationToPlay(string animationName)
-    {
-        while (!animator.GetCurrentAnimatorStateInfo(0).IsName(animationName))
-        {
-            yield return null; // Wait until the next frame
-        }
-    }
-
-    /// <summary>
-    /// Resets the playerTransform's state, including animations and movement.
+    /// Resets the player's state, enabling movement and resetting animation parameters.
     /// </summary>
     public void ResetState()
     {
-        // Reset animator parameters
-        animator.SetBool("isDead", false);
-        animator.ResetTrigger("Death");
-        animator.SetBool("isGrounded", true);
-        animator.SetFloat("velocityX", 0);
-        animator.SetFloat("velocityY", 0);
-
-        // Re-enable playerTransform movement
-        if (playerMove != null)
-        {
-            playerMove.enabled = true;
-            playerMove.ResetControl();
-        }
+        animator.SetBool("isDead", false); // Reset the isDead parameter
+        animator.ResetTrigger("Death"); // Reset the Death trigger
+        playerMove.enabled = true; // Re-enable player movement
+        playerMove.ResetControl(); // Reset control in the PlayerMove script
     }
 }

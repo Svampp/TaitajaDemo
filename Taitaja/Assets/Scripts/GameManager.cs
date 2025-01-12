@@ -1,73 +1,59 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 /// <summary>
-/// GameManager handles global game logic, including respawning the playerTransform after death.
+/// GameManager handles global game logic, including respawning the player after death.
 /// </summary>
 public class GameManager : MonoBehaviour
 {
     // Singleton instance of the GameManager
-    public static GameManager Instance;
+    public static GameManager Instance { get; private set; }
 
-    /// <summary>
-    /// Ensures only one instance of the GameManager exists in the game.
-    /// Destroys duplicate instances if they are created.
-    /// </summary>
     void Awake()
     {
         if (Instance == null)
         {
-            // Assign this instance to the static Instance variable
-            Instance = this;
+            Instance = this; // Assign this instance to the static Instance variable
+            DontDestroyOnLoad(gameObject); // Prevent this object from being destroyed when loading a new scene
         }
         else
         {
-            // Destroy duplicate GameManager instances
-            Destroy(gameObject);
+            Destroy(gameObject); // Destroy duplicate GameManager instances
         }
     }
 
     /// <summary>
-    /// Initiates the respawn process for the playerTransform after a delay.
+    /// Initiates the respawn process for the player after a delay.
     /// </summary>
-    /// <param name="player">The playerTransform GameObject to respawn.</param>
+    /// <param name="player">The player GameObject to respawn.</param>
     /// <param name="delay">The delay in seconds before the respawn occurs.</param>
     public void RespawnPlayer(GameObject player, float delay)
     {
-        // Start a coroutine to handle the respawn process
-        StartCoroutine(RespawnCoroutine(player, delay));
+        StartCoroutine(RespawnCoroutine(player, delay)); // Start the respawn coroutine
     }
 
     /// <summary>
-    /// Coroutine to respawn the playerTransform after a specified delay.
+    /// Coroutine to respawn the player after a specified delay.
     /// </summary>
-    /// <param name="player">The playerTransform GameObject to respawn.</param>
+    /// <param name="player">The player GameObject to respawn.</param>
     /// <param name="delay">The delay in seconds before the respawn occurs.</param>
-    private IEnumerator RespawnCoroutine(GameObject player, float delay)
+    IEnumerator RespawnCoroutine(GameObject player, float delay)
     {
         // Wait for the specified delay before respawning
         yield return new WaitForSeconds(delay);
 
         // Get the current respawn point from the RespawnManager
         Transform respawnPoint = RespawnManager.Instance.GetCurrentRespawnPoint();
+        if (respawnPoint == null) yield break; // Exit if no respawn point is available
 
-        // If no respawn point is set, exit the coroutine
-        if (respawnPoint == null)
-        {
-            yield break;
-        }
-
-        // Set the playerTransform's position to the respawn point
+        // Set the player's position to the respawn point
         player.transform.position = respawnPoint.position;
 
-        // Reactivate the playerTransform GameObject
+        // Reactivate the player GameObject
         player.SetActive(true);
 
-        // Reset the playerTransform's state (e.g., health, animations)
+        // Reset the player's state (e.g., health, animations)
         PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
-        if (playerHealth != null)
-        {
-            playerHealth.ResetState();
-        }
+        playerHealth?.ResetState(); // Use null conditional operator to safely call ResetState
     }
 }
