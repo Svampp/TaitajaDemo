@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 
 /// <summary>
-/// Manages the respawn points for the player and ensures the correct respawn point is used upon death.
+/// Manages the respawn points for the playerTransform and ensures the correct respawn point is used upon death.
 /// </summary>
 public class RespawnManager : MonoBehaviour
 {
     // Singleton instance of the RespawnManager
     public static RespawnManager Instance;
 
-    // The current active respawn point where the player will respawn after death
+    // The current active respawn point where the playerTransform will respawn after death
     Transform currentRespawnPoint;
 
     /// <summary>
@@ -31,16 +31,16 @@ public class RespawnManager : MonoBehaviour
 
     /// <summary>
     /// Sets the current respawn point to the specified Transform.
-    /// This is usually called when the player reaches a new checkpoint or transitions to a new map.
+    /// This is usually called when the playerTransform reaches a new checkpoint or transitions to a new map.
     /// </summary>
-    /// <param name="newRespawnPoint">The new respawn point for the player.</param>
+    /// <param name="newRespawnPoint">The new respawn point for the playerTransform.</param>
     public void SetRespawnPoint(Transform newRespawnPoint)
     {
         currentRespawnPoint = newRespawnPoint;
     }
 
     /// <summary>
-    /// Gets the current respawn point where the player will respawn after death.
+    /// Gets the current respawn point where the playerTransform will respawn after death.
     /// </summary>
     /// <returns>The Transform of the current respawn point.</returns>
     public Transform GetCurrentRespawnPoint()

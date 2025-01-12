@@ -18,9 +18,10 @@ public class TreeTrunkBoss : MonoBehaviour
 
     [Header("Value variables")]
     public float attackSpeed = 5f;
+    float timeCounter;
     int health = 3;
     public bool isHit = false;
-    public bool isAttacking = false;
+    //public bool isAttacking = false;
 
     [SerializeField] GameObject bulletPrefab;
     [SerializeField] GameObject firingSpot;
@@ -34,39 +35,51 @@ public class TreeTrunkBoss : MonoBehaviour
 
     void Start()
     {
-        
+        timeCounter = 0;
     }
 
     void Update()
     {
-        if (!isHit && !isAttacking)
-        {
-            StartCoroutine(GoAttack());
-        }
+        GoAttack();
     }
 
+    /// <summary>
+    /// Goes to Idle animation and resets variables
+    /// </summary>
     public void GoIdle()
     {
         anim.SetTrigger("Idle");
-        isAttacking = false;
+        timeCounter = 0;
         isHit = false;
     }
 
-    IEnumerator GoAttack()
+    /// <summary>
+    /// Counts time and attacks when enough time has passed
+    /// </summary>
+    void GoAttack()
     {
-        isAttacking = true;
-        yield return new WaitForSeconds(attackSpeed);
-        anim.SetTrigger("Attack");
+        timeCounter += Time.deltaTime;
+        if (timeCounter > attackSpeed && !isHit)
+        {
+            timeCounter = 0;
+            anim.SetTrigger("Attack");
+        }
     }
+    /// <summary>
+    /// Shoots a bullet
+    /// </summary>
     public void Shoot()
     {
         Instantiate(bulletPrefab, firingSpot.transform.position, bulletPrefab.transform.rotation);
     }
 
+    /// <summary>
+    /// Boss takes one damage
+    /// </summary>
     public void HitTaken()
     {
-        health--;
         isHit = true;
+        health--;
         anim.SetTrigger("Hit");
     }
 }

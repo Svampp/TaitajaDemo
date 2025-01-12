@@ -2,7 +2,7 @@
 
 public class MainCamera : MonoBehaviour
 {
-    Transform target; // The player's transform
+    Transform target; // The playerTransform's transform
     float topLeftX;   // Left boundary of the camera
     float topLeftY;   // Top boundary of the camera
     float bottomRightX; // Right boundary of the camera
@@ -20,7 +20,7 @@ public class MainCamera : MonoBehaviour
 
     void Awake()
     {
-        // Find the player object by tag and set the target
+        // Find the playerTransform object by tag and set the target
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
@@ -30,7 +30,7 @@ public class MainCamera : MonoBehaviour
 
     void LateUpdate()
     {
-        // Move the camera to follow the player within the map boundaries
+        // Move the camera to follow the playerTransform within the map boundaries
         if (target != null)
         {
             transform.position = new Vector3(

@@ -2,7 +2,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Handles player health, including death, animations, and respawn logic.
+/// Handles playerTransform health, including death, animations, and respawn logic.
 /// </summary>
 public class PlayerHealth : MonoBehaviour
 {
@@ -14,7 +14,7 @@ public class PlayerHealth : MonoBehaviour
     public Transform respawnPoint;
     public float respawnDelay = 1f;
 
-    // Reference to the player movement script
+    // Reference to the playerTransform movement script
     PlayerMove playerMove;
 
     // Flag to prevent multiple respawn triggers
@@ -29,18 +29,18 @@ public class PlayerHealth : MonoBehaviour
     }
 
     /// <summary>
-    /// Handles the player's death logic, including stopping movement,
+    /// Handles the playerTransform's death logic, including stopping movement,
     /// playing the death animation, and initiating the respawn process.
     /// </summary>
     public void Die()
     {
-        // Stop player movement
+        // Stop playerTransform movement
         rb.velocity = Vector2.zero;
 
         // Trigger death animation
         animator.SetTrigger("Death");
 
-        // Disable player movement
+        // Disable playerTransform movement
         if (playerMove != null)
         {
             playerMove.enabled = false;
@@ -66,7 +66,7 @@ public class PlayerHealth : MonoBehaviour
         float deathAnimationDuration = animator.GetCurrentAnimatorStateInfo(0).length;
         yield return new WaitForSeconds(deathAnimationDuration);
 
-        // Deactivate the player
+        // Deactivate the playerTransform
         gameObject.SetActive(false);
 
         // Trigger respawn through the GameManager
@@ -74,7 +74,7 @@ public class PlayerHealth : MonoBehaviour
     }
 
     /// <summary>
-    /// Respawns the player at the current respawn point and resets their state.
+    /// Respawns the playerTransform at the current respawn point and resets their state.
     /// </summary>
     public void Respawn()
     {
@@ -83,10 +83,10 @@ public class PlayerHealth : MonoBehaviour
 
         if (respawnPoint != null)
         {
-            // Move the player to the respawn point
+            // Move the playerTransform to the respawn point
             transform.position = respawnPoint.position;
 
-            // Reset the player's velocity
+            // Reset the playerTransform's velocity
             if (rb != null)
             {
                 rb.velocity = Vector2.zero;
@@ -106,10 +106,10 @@ public class PlayerHealth : MonoBehaviour
         animator.SetFloat("velocityX", 0);
         animator.SetFloat("velocityY", 0);
 
-        // Reactivate the player GameObject
+        // Reactivate the playerTransform GameObject
         gameObject.SetActive(true);
 
-        // Re-enable player movement
+        // Re-enable playerTransform movement
         if (playerMove != null)
         {
             playerMove.enabled = true;
@@ -133,7 +133,7 @@ public class PlayerHealth : MonoBehaviour
     }
 
     /// <summary>
-    /// Resets the player's state, including animations and movement.
+    /// Resets the playerTransform's state, including animations and movement.
     /// </summary>
     public void ResetState()
     {
@@ -144,7 +144,7 @@ public class PlayerHealth : MonoBehaviour
         animator.SetFloat("velocityX", 0);
         animator.SetFloat("velocityY", 0);
 
-        // Re-enable player movement
+        // Re-enable playerTransform movement
         if (playerMove != null)
         {
             playerMove.enabled = true;

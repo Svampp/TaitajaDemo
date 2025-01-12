@@ -2,7 +2,7 @@
 using System.Collections;
 
 /// <summary>
-/// GameManager handles global game logic, including respawning the player after death.
+/// GameManager handles global game logic, including respawning the playerTransform after death.
 /// </summary>
 public class GameManager : MonoBehaviour
 {
@@ -28,9 +28,9 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Initiates the respawn process for the player after a delay.
+    /// Initiates the respawn process for the playerTransform after a delay.
     /// </summary>
-    /// <param name="player">The player GameObject to respawn.</param>
+    /// <param name="player">The playerTransform GameObject to respawn.</param>
     /// <param name="delay">The delay in seconds before the respawn occurs.</param>
     public void RespawnPlayer(GameObject player, float delay)
     {
@@ -39,9 +39,9 @@ public class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Coroutine to respawn the player after a specified delay.
+    /// Coroutine to respawn the playerTransform after a specified delay.
     /// </summary>
-    /// <param name="player">The player GameObject to respawn.</param>
+    /// <param name="player">The playerTransform GameObject to respawn.</param>
     /// <param name="delay">The delay in seconds before the respawn occurs.</param>
     private IEnumerator RespawnCoroutine(GameObject player, float delay)
     {
@@ -57,13 +57,13 @@ public class GameManager : MonoBehaviour
             yield break;
         }
 
-        // Set the player's position to the respawn point
+        // Set the playerTransform's position to the respawn point
         player.transform.position = respawnPoint.position;
 
-        // Reactivate the player GameObject
+        // Reactivate the playerTransform GameObject
         player.SetActive(true);
 
-        // Reset the player's state (e.g., health, animations)
+        // Reset the playerTransform's state (e.g., health, animations)
         PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
         if (playerHealth != null)
         {
